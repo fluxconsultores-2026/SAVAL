@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapeo de Stakeholders · Proyecto FENIX · Saval</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #0077CA;
+  --blue2: #0055A0;
+  --light: #61AAE1;
+  --pale: #D6ECFA;
+  --gray: #B9B9BA;
+  --gray-d: #5D5D5C;
+  --white: #FFFFFF;
+  --bg: #F4F8FC;
+  --text: #1A2B3C;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Montserrat',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; -webkit-font-smoothing:antialiased; font-size:20px; }
+
+/* NAV */
+.nav { position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--white); display:flex; align-items:center; padding:0 28px; height:84px; box-shadow:0 2px 16px rgba(0,0,0,0.08); border-bottom:3px solid var(--pale); gap:0; }
+.nav-logo { height:50px; width:auto; display:block; margin-right:36px; flex-shrink:0; }
+.nav-items { display:flex; flex:1; height:100%; overflow-x:auto; }
+.nav-btn { display:flex; align-items:center; gap:10px; padding:0 16px; height:84px; font-family:'Montserrat',sans-serif; font-size:16px; font-weight:700; color:var(--gray-d); letter-spacing:0.03em; border:none; background:transparent; cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-3px; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
+.nav-btn:hover { background:var(--pale); color:var(--blue); }
+.nav-btn.active { color:var(--blue); border-bottom-color:var(--blue); background:var(--pale); }
+.nav-btn .nb { width:32px; height:32px; background:var(--pale); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:var(--blue); }
+.nav-btn.active .nb { background:var(--blue); color:var(--white); }
+
+/* PROGRESS */
+.prog { position:fixed; top:84px; left:0; height:4px; background:var(--blue); transition:width 0.4s; z-index:900; }
+
+/* SECTIONS */
+.sec { display:none; min-height:100vh; padding-top:84px; }
+.sec.on { display:block; }
+
+/* COVER */
+.cover { min-height:calc(100vh - 84px); background:linear-gradient(155deg,#002E5E 0%,#0077CA 55%,#61AAE1 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 32px 80px; text-align:center; position:relative; overflow:hidden; }
+.cover::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg width='60' height='104' viewBox='0 0 60 104' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='30,2 58,17 58,47 30,62 2,47 2,17' fill='none' stroke='white' stroke-width='1'/%3E%3Cpolygon points='30,54 58,69 58,99 30,114 2,99 2,69' fill='none' stroke='white' stroke-width='1'/%3E%3C/svg%3E") repeat; opacity:0.05; }
+.cover-logo { background:var(--white); border-radius:16px; padding:14px 28px; margin-bottom:40px; display:inline-block; box-shadow:0 6px 28px rgba(0,0,0,0.18); position:relative; z-index:1; }
+.cover-logo img { height:40px; display:block; }
+.cover-tag { font-size:15px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.6); margin-bottom:18px; position:relative; z-index:1; }
+.cover-title { font-size:clamp(44px,7vw,90px); font-weight:900; color:var(--white); line-height:1.05; letter-spacing:-0.02em; margin-bottom:12px; position:relative; z-index:1; }
+.cover-title em { font-style:normal; color:#A8D8F5; }
+.cover-sub { font-size:22px; font-weight:500; color:rgba(255,255,255,0.68); margin-bottom:52px; line-height:1.6; position:relative; z-index:1; }
+.cover-pills { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:52px; position:relative; z-index:1; }
+.cover-pill { background:rgba(255,255,255,0.13); border:1px solid rgba(255,255,255,0.25); border-radius:20px; padding:12px 24px; backdrop-filter:blur(8px); text-align:center; }
+.cover-pill-n { font-size:32px; font-weight:900; color:var(--white); line-height:1; }
+.cover-pill-l { font-size:11px; font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:0.06em; text-transform:uppercase; margin-top:4px; }
+.cover-cta { background:var(--white); color:var(--blue); border:none; border-radius:40px; padding:22px 56px; font-family:'Montserrat',sans-serif; font-size:20px; font-weight:800; letter-spacing:0.05em; cursor:pointer; box-shadow:0 8px 28px rgba(0,0,0,0.2); transition:transform 0.2s,box-shadow 0.2s; position:relative; z-index:1; }
+.cover-cta:hover { transform:translateY(-3px); box-shadow:0 14px 36px rgba(0,0,0,0.3); }
+
+/* SECTION HEADER */
+.sh { background:linear-gradient(135deg,#002E5E,#0077CA); padding:44px 44px 38px; position:relative; overflow:hidden; }
+.sh::after { content:''; position:absolute; right:-60px; top:-60px; width:250px; height:250px; border:36px solid rgba(255,255,255,0.05); border-radius:50%; }
+.sh-n { font-size:14px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.48); margin-bottom:8px; }
+.sh-t { font-size:44px; font-weight:900; color:var(--white); letter-spacing:-0.02em; line-height:1.1; position:relative; z-index:1; }
+.sh-t em { font-style:normal; color:var(--light); }
+.sh-d { font-size:18px; color:rgba(255,255,255,0.6); margin-top:10px; font-weight:500; line-height:1.5; position:relative; z-index:1; }
+
+/* BODY */
+.sb { padding-bottom:60px; }
+.wrap { max-width:1400px; margin:0 auto; padding:32px 28px; }
+
+/* AUDIENCE CARDS */
+.aud-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; }
+.aud-card { background:var(--white); border-radius:20px; overflow:hidden; box-shadow:0 3px 20px rgba(0,0,0,0.07); border-top:5px solid var(--blue); transition:transform 0.2s,box-shadow 0.2s; }
+.aud-card:hover { transform:translateY(-4px); box-shadow:0 8px 32px rgba(0,0,0,0.12); }
+.aud-card.c1 { border-top-color:#0077CA; }
+.aud-card.c2 { border-top-color:#0093D0; }
+.aud-card.c3 { border-top-color:#00A8C6; }
+.aud-card.c4 { border-top-color:#2E7D99; }
+.aud-card.c5 { border-top-color:#3D8B77; }
+.aud-card-head { padding:22px 22px 14px; display:flex; align-items:flex-start; gap:14px; }
+.aud-icon { width:62px; height:62px; border-radius:16px; background:var(--pale); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.aud-icon svg { width:26px; height:26px; }
+.aud-name { font-size:20px; font-weight:800; color:var(--text); line-height:1.25; }
+.aud-role { font-size:14px; color:var(--gray-d); font-weight:500; margin-top:4px; }
+.aud-chips { display:flex; flex-wrap:wrap; gap:6px; padding:0 22px 18px; }
+.aud-chip { font-size:13px; font-weight:700; padding:6px 14px; border-radius:20px; letter-spacing:0.04em; }
+.chip-inf { background:#EBF5FB; color:#1565C0; }
+.chip-imp { background:#FFF3E0; color:#E65100; }
+.chip-obj { background:#E8F5E9; color:#2E7D32; }
+.aud-meta { border-top:1px solid var(--pale); margin:0 22px; padding:14px 0; display:flex; gap:20px; }
+.aud-meta-item { font-size:14px; color:var(--gray-d); font-weight:600; }
+.aud-meta-item span { display:block; font-size:13px; font-weight:500; color:var(--gray); margin-bottom:3px; }
+
+/* SAMPLE TABLE */
+.sample-table { width:100%; border-collapse:separate; border-spacing:0; background:var(--white); border-radius:18px; overflow:hidden; box-shadow:0 3px 20px rgba(0,0,0,0.07); }
+.sample-table thead tr { background:linear-gradient(135deg,#002E5E,#0077CA); }
+.sample-table thead th { color:var(--white); font-size:16px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:22px 24px; text-align:left; }
+.sample-table tbody tr { transition:background 0.15s; }
+.sample-table tbody tr:hover { background:var(--pale); }
+.sample-table tbody tr:last-child { background:var(--pale); font-weight:800; }
+.sample-table tbody tr:not(:last-child) { border-bottom:1px solid #E8F2FA; }
+.sample-table td { padding:20px 24px; font-size:18px; color:var(--text); }
+.sample-table td:last-child { text-align:center; }
+.n-badge { background:var(--blue); color:var(--white); font-size:20px; font-weight:900; border-radius:12px; padding:8px 18px; display:inline-block; }
+.n-badge.total { background:linear-gradient(135deg,#002E5E,#0077CA); font-size:22px; }
+
+/* INTERVIEW BLOCKS */
+.blocks-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+.block-card { background:var(--white); border-radius:18px; padding:24px; box-shadow:0 3px 16px rgba(0,0,0,0.07); display:flex; gap:18px; align-items:flex-start; border-left:5px solid var(--blue); }
+.block-card.b0 { border-left-color:#61AAE1; }
+.block-card.b1 { border-left-color:#0077CA; }
+.block-card.b2 { border-left-color:#E65100; }
+.block-card.b3 { border-left-color:#2E7D32; }
+.block-card.b4 { border-left-color:#7B1FA2; }
+.block-num { width:60px; height:60px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:900; color:var(--white); flex-shrink:0; }
+.b0 .block-num { background:#61AAE1; }
+.b1 .block-num { background:#0077CA; }
+.b2 .block-num { background:#E65100; }
+.b3 .block-num { background:#2E7D32; }
+.b4 .block-num { background:#7B1FA2; }
+.block-body { flex:1; }
+.block-name { font-size:20px; font-weight:800; color:var(--text); margin-bottom:6px; }
+.block-dim { font-size:14px; font-weight:600; color:var(--blue); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:10px; }
+.block-dur { background:var(--pale); color:var(--blue); font-size:15px; font-weight:700; border-radius:20px; padding:6px 16px; display:inline-block; }
+.block-cats { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+.bcat { font-size:11px; font-weight:600; color:var(--gray-d); background:#F0F4F8; border:1px solid #D8E4EE; border-radius:20px; padding:3px 10px; letter-spacing:0.02em; }
+.total-badge { background:linear-gradient(135deg,#002E5E,#0077CA); color:var(--white); font-size:18px; font-weight:800; border-radius:20px; padding:16px 36px; display:inline-flex; align-items:center; gap:10px; margin-top:20px; }
+
+/* QUESTIONNAIRE TABS */
+.q-tabs { display:flex; gap:0; overflow-x:auto; border-bottom:2px solid var(--pale); margin-bottom:24px; }
+.q-tab { padding:14px 22px; font-family:'Montserrat',sans-serif; font-size:15px; font-weight:700; color:var(--gray-d); border:none; background:transparent; cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-2px; transition:all 0.2s; white-space:nowrap; letter-spacing:0.03em; }
+.q-tab:hover { background:var(--pale); color:var(--blue); }
+.q-tab.on { color:var(--blue); border-bottom-color:var(--blue); background:var(--pale); }
+
+.q-panel { display:none; }
+.q-panel.on { display:block; }
+
+/* QUESTION CARDS */
+.q-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+.q-card { background:var(--white); border-radius:18px; overflow:hidden; box-shadow:0 3px 16px rgba(0,0,0,0.07); }
+.q-card-top { background:linear-gradient(135deg,var(--blue),var(--light)); padding:16px 20px; }
+.q-card-dim { font-size:12px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.7); margin-bottom:6px; }
+.q-card-cat { font-size:19px; font-weight:800; color:var(--white); line-height:1.2; }
+.q-card-body { padding:22px 24px; }
+.q-label { font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--blue); margin-bottom:10px; }
+.q-question { font-size:19px; font-weight:700; color:var(--text); line-height:1.5; margin-bottom:18px; font-style:italic; }
+.q-field-label { font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-d); margin-bottom:8px; }
+.q-field-tags { display:flex; flex-wrap:wrap; gap:5px; }
+.q-field-tag { font-size:14px; font-weight:600; color:var(--blue); background:var(--pale); border-radius:20px; padding:6px 14px; }
+
+/* DELIVERABLES */
+.deliv-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+.deliv-card { background:var(--white); border-radius:18px; padding:28px; box-shadow:0 3px 16px rgba(0,0,0,0.07); display:flex; gap:18px; }
+.deliv-icon { width:64px; height:64px; border-radius:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.deliv-icon svg { width:26px; height:26px; }
+.deliv-title { font-size:20px; font-weight:800; color:var(--text); margin-bottom:10px; }
+.deliv-desc { font-size:16px; color:var(--gray-d); line-height:1.6; font-weight:500; }
+
+/* MOBILE BOTTOM NAV */
+.bnav { position:fixed; bottom:0; left:0; right:0; background:var(--white); display:flex; border-top:1px solid #E0EAF4; z-index:100; box-shadow:0 -4px 20px rgba(0,0,0,0.07); }
+.bn-btn { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:9px 3px; border:none; background:transparent; cursor:pointer; font-family:'Montserrat',sans-serif; gap:3px; transition:background 0.2s; border-top:3px solid transparent; }
+.bn-btn:hover,.bn-btn.on { background:var(--pale); border-top-color:var(--blue); }
+.bn-btn.on .bn-i,.bn-btn.on .bn-l { color:var(--blue); }
+.bn-i { font-size:18px; color:var(--gray); line-height:1; }
+.bn-l { font-size:8px; font-weight:700; letter-spacing:0.04em; color:var(--gray); text-transform:uppercase; }
+
+/* UTILS */
+.section-badge { display:inline-block; background:var(--pale); color:var(--blue); font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; border-radius:20px; padding:6px 16px; margin-bottom:20px; }
+.divider { height:2px; background:var(--pale); margin:28px 0; border-radius:2px; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.fu { opacity:0; animation:fadeUp 0.45s ease forwards; }
+.fu:nth-child(1){animation-delay:0.04s} .fu:nth-child(2){animation-delay:0.09s} .fu:nth-child(3){animation-delay:0.14s} .fu:nth-child(4){animation-delay:0.19s} .fu:nth-child(5){animation-delay:0.24s} .fu:nth-child(6){animation-delay:0.29s}
+
+@media (max-width:640px) {
+  .nav-items { display:none; }
+  .wrap { padding:20px 14px; }
+  .sh { padding:28px 18px 24px; }
+  .sh-t { font-size:24px; }
+  body { font-size:15px; }
+  .bnav { padding-bottom:env(safe-area-inset-bottom,0); }
+}
+@media (min-width:641px) {
+  .bnav { display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="prog" id="prog" style="width:16.6%"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <img src="data:image/png;base64,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" class="nav-logo" alt="Saval">
+  <div class="nav-items">
+    <button class="nav-btn active" onclick="go(0)"><span class="nb">1</span> Inicio</button>
+    <button class="nav-btn" onclick="go(1)"><span class="nb">2</span> Audiencias</button>
+    <button class="nav-btn" onclick="go(2)"><span class="nb">3</span> Muestra</button>
+    <button class="nav-btn" onclick="go(3)"><span class="nb">4</span> Estructura</button>
+    <button class="nav-btn" onclick="go(4)"><span class="nb">5</span> Cuestionarios</button>
+    <button class="nav-btn" onclick="go(5)"><span class="nb">6</span> Entregables</button>
+  </div>
+</nav>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <button class="bn-btn on" onclick="go(0)"><div class="bn-i">⌂</div><div class="bn-l">Inicio</div></button>
+  <button class="bn-btn" onclick="go(1)"><div class="bn-i">◎</div><div class="bn-l">Aud.</div></button>
+  <button class="bn-btn" onclick="go(2)"><div class="bn-i">≡</div><div class="bn-l">Muestra</div></button>
+  <button class="bn-btn" onclick="go(3)"><div class="bn-i">◷</div><div class="bn-l">Estruc.</div></button>
+  <button class="bn-btn" onclick="go(4)"><div class="bn-i">?</div><div class="bn-l">Quest.</div></button>
+  <button class="bn-btn" onclick="go(5)"><div class="bn-i">✦</div><div class="bn-l">Entreg.</div></button>
+</nav>
+
+<!-- ═══ SEC 1: COVER ═══ -->
+<section class="sec on" id="s0">
+<div class="cover">
+  <div class="cover-tag">Proyecto SAP RISE · Laboratorios Saval</div>
+  <h1 class="cover-title">Mapeo y entrevistas<br>a <em>stakeholders</em></h1>
+  <p class="cover-sub">Diseño metodológico para diagnóstico de readiness<br>y gestión del cambio organizacional</p>
+  <div class="cover-pills">
+    <div class="cover-pill"><div class="cover-pill-n">5</div><div class="cover-pill-l">Audiencias</div></div>
+    <div class="cover-pill"><div class="cover-pill-n">60'</div><div class="cover-pill-l">Por sesión</div></div>
+    <div class="cover-pill"><div class="cover-pill-n">5</div><div class="cover-pill-l">Dim. Flux</div></div>
+  </div>
+  <button class="cover-cta" onclick="go(1)" style="display:none">Ver metodología →</button>
+</div>
+</section>
+
+<!-- ═══ SEC 2: AUDIENCIAS ═══ -->
+<section class="sec" id="s1">
+<div class="sh">
+  <div class="sh-n">02 · Segmentación</div>
+  <h2 class="sh-t">Audiencias <em>objetivo</em></h2>
+  <p class="sh-d">Diferenciación según influencia real e impacto operativo/emocional</p>
+</div>
+<div class="sb"><div class="wrap">
+  <div class="aud-grid">
+    <!-- Card 1 -->
+    <div class="aud-card c1 fu">
+      <div class="aud-card-head">
+        <div class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#0077CA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+        <div><div class="aud-name">Sponsors ejecutivos</div><div class="aud-role">Comité ejecutivo · Alta dirección</div></div>
+      </div>
+      <div class="aud-chips">
+        <span class="aud-chip chip-inf">Influencia muy alta</span>
+        <span class="aud-chip chip-imp">Impacto medio</span>
+        <span class="aud-chip chip-obj">~12% de la muestra</span>
+      </div>
+      <div class="aud-meta">
+        <div class="aud-meta-item"><span>Objetivo</span>Liderazgo visible y patrocinio activo</div>
+      </div>
+    </div>
+    <!-- Card 2 -->
+    <div class="aud-card c2 fu">
+      <div class="aud-card-head">
+        <div class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#0093D0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div><div class="aud-name">Dueños de proceso</div><div class="aud-role">Process Owners · PP, QM, MM, SD, FI</div></div>
+      </div>
+      <div class="aud-chips">
+        <span class="aud-chip chip-inf">Influencia alta</span>
+        <span class="aud-chip chip-imp">Impacto alto</span>
+        <span class="aud-chip chip-obj">~24% de la muestra</span>
+      </div>
+      <div class="aud-meta">
+        <div class="aud-meta-item"><span>Objetivo</span>Impactos As-Is/To-Be y riesgos de negocio</div>
+      </div>
+    </div>
+    <!-- Card 3 -->
+    <div class="aud-card c3 fu">
+      <div class="aud-card-head">
+        <div class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#00A8C6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div><div class="aud-name">Key Users</div><div class="aud-role">Usuarios clave por módulo y país</div></div>
+      </div>
+      <div class="aud-chips">
+        <span class="aud-chip chip-inf">Influencia media</span>
+        <span class="aud-chip chip-imp">Impacto muy alto</span>
+        <span class="aud-chip chip-obj">~24% de la muestra</span>
+      </div>
+      <div class="aud-meta">
+        <div class="aud-meta-item"><span>Objetivo</span>Brechas de capacidad y riesgos de adopción</div>
+      </div>
+    </div>
+    <!-- Card 4 -->
+    <div class="aud-card c4 fu">
+      <div class="aud-card-head">
+        <div class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#2E7D99" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div><div class="aud-name">Líderes locales</div><div class="aud-role">Jefaturas país/área · Filiales</div></div>
+      </div>
+      <div class="aud-chips">
+        <span class="aud-chip chip-inf">Influencia media</span>
+        <span class="aud-chip chip-imp">Impacto alto</span>
+        <span class="aud-chip chip-obj">~32% de la muestra</span>
+      </div>
+      <div class="aud-meta">
+        <div class="aud-meta-item"><span>Objetivo</span>Tensión estandarización vs identidad local</div>
+      </div>
+    </div>
+    <!-- Card 5 -->
+    <div class="aud-card c5 fu">
+      <div class="aud-card-head">
+        <div class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#3D8B77" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div><div class="aud-name">Usuarios finales</div><div class="aud-role">Operación diaria representativa</div></div>
+      </div>
+      <div class="aud-chips">
+        <span class="aud-chip chip-inf">Influencia baja</span>
+        <span class="aud-chip chip-imp">Impacto muy alto</span>
+        <span class="aud-chip chip-obj">~8% de la muestra</span>
+      </div>
+      <div class="aud-meta">
+        <div class="aud-meta-item"><span>Objetivo</span>Anticipar resistencia, miedos y necesidades de soporte</div>
+      </div>
+    </div>
+  </div>
+</div></div>
+</section>
+
+<!-- ═══ SEC 3: MUESTRA ═══ -->
+<section class="sec" id="s2">
+<div class="sh">
+  <div class="sh-n">03 · Muestra</div>
+  <h2 class="sh-t">Determinación de <em>muestra</em></h2>
+  <p class="sh-d">Distribución proporcional de la muestra · Orientada a insights accionables</p>
+</div>
+<div class="sb"><div class="wrap">
+  <table class="sample-table">
+    <thead>
+      <tr>
+        <th>Audiencia</th>
+        <th>Alcance</th>
+        <th>% muestra</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="fu">
+        <td><strong>Sponsors ejecutivos</strong></td>
+        <td>Corporativo</td>
+        <td><span class="n-badge">~12%</span></td>
+      </tr>
+      <tr class="fu">
+        <td><strong>Dueños de proceso</strong> <small style="display:block;color:#888;font-size:12px;">PP, QM, EWM, FI</small></td>
+        <td>Global / E2E</td>
+        <td><span class="n-badge">~24%</span></td>
+      </tr>
+      <tr class="fu">
+        <td><strong>Key Users críticos</strong> <small style="display:block;color:#888;font-size:12px;">Por módulo</small></td>
+        <td>Por módulo</td>
+        <td><span class="n-badge">~24%</span></td>
+      </tr>
+      <tr class="fu">
+        <td><strong>Líderes locales</strong> <small style="display:block;color:#888;font-size:12px;">Todos los países</small></td>
+        <td>Chile + filiales</td>
+        <td><span class="n-badge">~32%</span></td>
+      </tr>
+      <tr class="fu">
+        <td><strong>Usuarios finales</strong></td>
+        <td>Operación</td>
+        <td><span class="n-badge">~8%</span></td>
+      </tr>
+      <tr class="fu">
+        <td><strong>Total estimado</strong></td>
+        <td></td>
+        <td><span class="n-badge total">100%</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div></div>
+</section>
+
+<!-- ═══ SEC 4: ESTRUCTURA ═══ -->
+<section class="sec" id="s3">
+<div class="sh">
+  <div class="sh-n">04 · Estructura</div>
+  <h2 class="sh-t">Arquitectura de <em>entrevista</em></h2>
+  <p class="sh-d">Estructura estándar de 60 minutos · 5 dimensiones Flux</p>
+</div>
+<div class="sb"><div class="wrap">
+  <div class="blocks-grid">
+    <div class="block-card b0 fu">
+      <div class="block-num">1</div>
+      <div class="block-body">
+        <div class="block-name">Apertura y contexto</div>
+        <div class="block-dim">Stakeholders</div>
+        <div class="block-dur">5 minutos</div>
+        <div class="block-cats">
+          <span class="bcat">Cultura de trabajo</span>
+          <span class="bcat">Importancia del proyecto</span>
+        </div>
+      </div>
+    </div>
+    <div class="block-card b1 fu">
+      <div class="block-num">2</div>
+      <div class="block-body">
+        <div class="block-name">Relato y liderazgo</div>
+        <div class="block-dim">Comunicaciones</div>
+        <div class="block-dur">10 minutos</div>
+        <div class="block-cats">
+          <span class="bcat">Importancia del proyecto</span>
+          <span class="bcat">Gestión del cambio</span>
+        </div>
+      </div>
+    </div>
+    <div class="block-card b2 fu">
+      <div class="block-num">3</div>
+      <div class="block-body">
+        <div class="block-name">Impactos reales</div>
+        <div class="block-dim">Impactos</div>
+        <div class="block-dur">20 minutos</div>
+        <div class="block-cats">
+          <span class="bcat">Expectativas</span>
+          <span class="bcat">Temores / Preocupaciones</span>
+          <span class="bcat">Criterios de éxito</span>
+        </div>
+      </div>
+    </div>
+    <div class="block-card b3 fu">
+      <div class="block-num">4</div>
+      <div class="block-body">
+        <div class="block-name">Capacidades y soporte</div>
+        <div class="block-dim">Formación</div>
+        <div class="block-dur">15 minutos</div>
+        <div class="block-cats">
+          <span class="bcat">Criterios de éxito</span>
+          <span class="bcat">Gestión del cambio</span>
+        </div>
+      </div>
+    </div>
+    <div class="block-card b4 fu">
+      <div class="block-num">5</div>
+      <div class="block-body">
+        <div class="block-name">Energía y riesgos</div>
+        <div class="block-dim">Salud & Bienestar</div>
+        <div class="block-dur">10 minutos</div>
+        <div class="block-cats">
+          <span class="bcat">Temores / Preocupaciones</span>
+          <span class="bcat">Cultura de trabajo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:24px;">
+    <span class="total-badge">⏱ Total: 60 minutos por entrevista</span>
+  </div>
+</div></div>
+</section>
+
+<!-- ═══ SEC 5: CUESTIONARIOS ═══ -->
+<section class="sec" id="s4">
+<div class="sh">
+  <div class="sh-n">05 · Cuestionarios</div>
+  <h2 class="sh-t">Preguntas por <em>audiencia</em></h2>
+  <p class="sh-d">1 set por audiencia · Flux ajusta lenguaje según rol en ejecución real</p>
+</div>
+<div class="sb"><div class="wrap">
+  <div class="q-tabs">
+    <button class="q-tab on" onclick="qtab(0)">Transversal · Todas</button>
+    <button class="q-tab" onclick="qtab(1)">A · Sponsors ejecutivos</button>
+    <button class="q-tab" onclick="qtab(2)">B · Dueños de proceso</button>
+    <button class="q-tab" onclick="qtab(3)">C · Key Users</button>
+    <button class="q-tab" onclick="qtab(4)">D · Líderes locales</button>
+    <button class="q-tab" onclick="qtab(5)">E · Usuarios finales</button>
+  </div>
+
+  <!-- TRANSVERSAL -->
+  <div class="q-panel on" id="qp0">
+  <div style="margin-bottom:24px;">
+    <div class="section-badge">Aplica a todas las audiencias · 9 preguntas · 6 categorías</div>
+  </div>
+
+  <!-- Categorías -->
+  <div style="background:var(--white);border-radius:18px;padding:24px 28px;box-shadow:0 3px 16px rgba(0,0,0,0.07);margin-bottom:24px;">
+    <div style="font-size:13px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--blue);margin-bottom:18px;">Categorías de clasificación</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+      <div style="background:var(--pale);border-radius:12px;padding:14px 18px;"><div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">1 · Cultura de trabajo</div><div style="font-size:14px;color:var(--text);font-weight:500;line-height:1.4;">Lo que sustenta la forma de ser y hacer de la organización</div></div>
+      <div style="background:var(--pale);border-radius:12px;padding:14px 18px;"><div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">2 · Importancia del proyecto</div><div style="font-size:14px;color:var(--text);font-weight:500;line-height:1.4;">Relevancia organizacional del proyecto</div></div>
+      <div style="background:var(--pale);border-radius:12px;padding:14px 18px;"><div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">3 · Criterios de éxito</div><div style="font-size:14px;color:var(--text);font-weight:500;line-height:1.4;">Lo que debe ocurrir para declarar el proyecto exitoso</div></div>
+      <div style="background:var(--pale);border-radius:12px;padding:14px 18px;"><div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">4 · Expectativas del proyecto</div><div style="font-size:14px;color:var(--text);font-weight:500;line-height:1.4;">Expectativas puestas en la implementación</div></div>
+      <div style="background:var(--pale);border-radius:12px;padding:14px 18px;"><div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">5 · Temores / Preocupaciones</div><div style="font-size:14px;color:var(--text);font-weight:500;line-height:1.4;">Declaración de temores involucrados en la implementación</div></div>
+      <div style="background:var(--pale);border-radius:12px;padding:14px 18px;"><div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">6 · Gestión del cambio</div><div style="font-size:14px;color:var(--text);font-weight:500;line-height:1.4;">Conocimiento y aporte de la GdC al proyecto</div></div>
+    </div>
+  </div>
+
+  <!-- 9 preguntas -->
+  <div class="q-grid">
+    <div class="q-card fu"><div class="q-card-top" style="background:linear-gradient(135deg,#002E5E,#0077CA);"><div class="q-card-dim">Cultura de trabajo · Importancia</div><div class="q-card-cat">Momento de desarrollo</div></div><div class="q-card-body"><div class="q-label">Pregunta 1</div><div class="q-question">"¿En qué momento de desarrollo de su negocio se encuentra Saval?"</div></div></div>
+    <div class="q-card fu"><div class="q-card-top" style="background:linear-gradient(135deg,#002E5E,#0077CA);"><div class="q-card-dim">Cultura de trabajo</div><div class="q-card-cat">Fortalezas organizacionales</div></div><div class="q-card-body"><div class="q-label">Pregunta 2</div><div class="q-question">"¿Cuáles son las mayores fortalezas de Saval? A nivel negocio y a nivel personas."</div></div></div>
+    <div class="q-card fu"><div class="q-card-top" style="background:linear-gradient(135deg,#002E5E,#0077CA);"><div class="q-card-dim">Importancia del proyecto</div><div class="q-card-cat">Decisión de implementar</div></div><div class="q-card-body"><div class="q-label">Pregunta 3</div><div class="q-question">"¿Por qué se toma la decisión de implementar SAP?"</div></div></div>
+    <div class="q-card fu"><div class="q-card-top" style="background:linear-gradient(135deg,#002E5E,#0077CA);"><div class="q-card-dim">Expectativas del proyecto</div><div class="q-card-cat">Expectativas generales</div></div><div class="q-card-body"><div class="q-label">Pregunta 4</div><div class="q-question">"¿Qué expectativas tiene sobre el proyecto de implementación SAP?"</div></div></div>
+    <div class="q-card fu"><div class="q-card-top" style="background:linear-gradient(135deg,#002E5E,#0077CA);"><div class="q-card-dim">Expectativas del proyecto</div><div class="q-card-cat">Ventajas de la implementación</div></div><div class="q-card-body"><div class="q-label">Pregunta 5</div><div class="q-question">"¿Qué ventajas nos entregará la implementación SAP?"</div></div></div>
+    <div class="q-card fu"><div class="q-card-top" style="background:linear-gradient(135deg,#002E5E,#0077CA);"><div class="q-card-dim">Gestión del cambio</div><div class="q-card-cat">Aporte de la GdC</div></div><div class="q-card-body"><div class="q-label">Pregunta 6</div><div class="q-question">"Con respecto a la gestión del cambio, ¿qué ventajas entrega al proyecto?"</div></div></div>
+    <div class="q-card fu"><div class="q-card-top" style="background:linear-gradient(135deg,#002E5E,#0077CA);"><div class="q-card-dim">Gestión del cambio · Comunicaciones</div><div class="q-card-cat">Comunicación ideal</div></div><div class="q-card-body"><div class="q-label">Pregunta 7</div><div class="q-question">"Con respecto a la comunicación, ¿cómo debería ser una comunicación ideal del proyecto?"</div></div></div>
+    <div class="q-card fu"><div class="q-card-top" style="background:linear-gradient(135deg,#002E5E,#0077CA);"><div class="q-card-dim">Criterios de éxito</div><div class="q-card-cat">Definición de éxito</div></div><div class="q-card-body"><div class="q-label">Pregunta 8</div><div class="q-question">"¿Qué se debería cumplir para calificar de exitoso este proyecto?"</div></div></div>
+    <div class="q-card fu"><div class="q-card-top" style="background:linear-gradient(135deg,#002E5E,#0077CA);"><div class="q-card-dim">Expectativas · Cultura de trabajo</div><div class="q-card-cat">Futuro de Saval</div></div><div class="q-card-body"><div class="q-label">Pregunta 9</div><div class="q-question">"¿Cómo imagina el futuro de Saval de cara a esta transformación?"</div></div></div>
+  </div>
+  </div>
+
+  <!-- A (now index 1) -->
+  <div class="q-panel" id="qp1">
+  <div class="q-grid">
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Stakeholders</div><div class="q-card-cat">Liderazgo visible</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué necesita ver para sentir que este proyecto va bien, más allá del avance técnico?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Expectativas reales</span><span class="q-field-tag">Indicadores humanos</span><span class="q-field-tag">Umbrales de alerta</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Comunicaciones</div><div class="q-card-cat">Relato estratégico</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"Si tuviera que explicar este proyecto en 2 minutos, ¿qué no puede faltar en el mensaje?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Narrativa</span><span class="q-field-tag">Miedos históricos</span><span class="q-field-tag">Visión 2030</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Impactos</div><div class="q-card-cat">Riesgo de negocio</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Dónde ve el mayor riesgo operativo en un Big Bang regional?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Continuidad</span><span class="q-field-tag">Compliance</span><span class="q-field-tag">Reputación</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Formación</div><div class="q-card-cat">Capacidad organizacional</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué nivel de autonomía espera de la organización post go-live?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Expectativas de desempeño</span><span class="q-field-tag">Tolerancia a errores</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Salud & Bienestar</div><div class="q-card-cat">Sponsorship humano</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué señales le indicarían desgaste crítico del equipo?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Burnout</span><span class="q-field-tag">Rotación</span><span class="q-field-tag">Liderazgo intermedio</span></div></div></div>
+  </div>
+  </div>
+
+  <!-- B -->
+  <div class="q-panel" id="qp2">
+  <div class="q-grid">
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Impactos</div><div class="q-card-cat">Brecha As-Is / To-Be</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué cambiará realmente en su proceso el día 1?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Roles</span><span class="q-field-tag">Decisiones</span><span class="q-field-tag">Controles</span><span class="q-field-tag">Tiempos</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Stakeholders</div><div class="q-card-cat">Poder informal</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Quién puede bloquear o acelerar la adopción en su proceso?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Influencia real vs organigrama</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Comunicaciones</div><div class="q-card-cat">Expectativas</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué le preocupa que la gente 'no esté entendiendo' del cambio?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Malentendidos críticos</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Formación</div><div class="q-card-cat">Habilidades clave</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué errores no se pueden permitir en su proceso?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Riesgos GMP</span><span class="q-field-tag">Trazabilidad</span><span class="q-field-tag">Calidad</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Salud & Bienestar</div><div class="q-card-cat">Sobrecarga</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Quiénes están más expuestos al desgaste?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Key users invisibles</span></div></div></div>
+  </div>
+  </div>
+
+  <!-- C -->
+  <div class="q-panel" id="qp3">
+  <div class="q-grid">
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Impactos</div><div class="q-card-cat">Cambio operativo</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué tareas suyas cambian más con SAP S/4HANA?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Dolor real</span><span class="q-field-tag">Retrabajo</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Formación</div><div class="q-card-cat">Preparación</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿En qué momento se sentirá 'seguro' usando el sistema?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Práctica</span><span class="q-field-tag">Soporte</span><span class="q-field-tag">SEN</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Stakeholders</div><div class="q-card-cat">Rol ambiguo</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Cómo compatibiliza su rol diario con el proyecto?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Riesgo de sobrecarga</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Comunicaciones</div><div class="q-card-cat">Expectativas</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué información le llega tarde o confusa?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Ruido comunicacional</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Salud & Bienestar</div><div class="q-card-cat">Energía</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué le está quitando más energía hoy?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Señales tempranas de burnout</span></div></div></div>
+  </div>
+  </div>
+
+  <!-- D -->
+  <div class="q-panel" id="qp4">
+  <div class="q-grid">
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Stakeholders</div><div class="q-card-cat">Identidad local</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué teme perder su país con la estandarización?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Cultura</span><span class="q-field-tag">Prácticas locales</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Impactos</div><div class="q-card-cat">Adaptación</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Dónde el estándar no calza con su realidad?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Riesgos ocultos</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Comunicaciones</div><div class="q-card-cat">Confianza</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué mensajes generan resistencia en su equipo?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Centralismo percibido</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Formación</div><div class="q-card-cat">Capacidad local</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué soporte necesita su equipo en go-live?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Presencial vs remoto</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Salud & Bienestar</div><div class="q-card-cat">Clima</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Cómo está hoy la energía del equipo?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Fatiga regional</span></div></div></div>
+  </div>
+  </div>
+
+  <!-- E -->
+  <div class="q-panel" id="qp5">
+  <div class="q-grid">
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Impactos</div><div class="q-card-cat">Trabajo diario</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué es lo que más le preocupa de trabajar con SAP?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Miedos</span><span class="q-field-tag">Incertidumbre</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Comunicaciones</div><div class="q-card-cat">Sentido</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Para qué cree usted que se hace este proyecto?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Brecha narrativa</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Formación</div><div class="q-card-cat">Aprendizaje</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Cómo le gusta aprender algo nuevo?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Canales efectivos</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Stakeholders</div><div class="q-card-cat">Referentes</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿A quién escucha cuando tiene dudas?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Redes informales</span></div></div></div>
+    <div class="q-card fu"><div class="q-card-top"><div class="q-card-dim">Salud & Bienestar</div><div class="q-card-cat">Ansiedad</div></div><div class="q-card-body"><div class="q-label">Pregunta disparadora</div><div class="q-question">"¿Qué le daría tranquilidad el día 1?"</div><div class="q-field-label">Campos de desarrollo</div><div class="q-field-tags"><span class="q-field-tag">Soporte</span><span class="q-field-tag">Certezas</span></div></div></div>
+  </div>
+  </div>
+
+</div></div>
+</section>
+
+<!-- ═══ SEC 6: ENTREGABLES ═══ -->
+<section class="sec" id="s5">
+<div class="sh">
+  <div class="sh-n">06 · Entregables</div>
+  <h2 class="sh-t">Insumos a <em>entregables Flux</em></h2>
+  <p class="sh-d">Este diseño garantiza insumos directos para 5 entregables clave</p>
+</div>
+<div class="sb"><div class="wrap">
+  <div class="deliv-grid">
+    <div class="deliv-card fu">
+      <div class="deliv-icon" style="background:#EBF5FB"><svg viewBox="0 0 24 24" fill="none" stroke="#0077CA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4M18 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
+      <div>
+        <div class="deliv-title">Matriz de stakeholders</div>
+        <div class="deliv-desc">Influencia real, redes informales y focos de resistencia mapeados por audiencia.</div>
+      </div>
+    </div>
+    <div class="deliv-card fu">
+      <div class="deliv-icon" style="background:#E8F5E9"><svg viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div>
+        <div class="deliv-title">Storytelling del proyecto</div>
+        <div class="deliv-desc">Narrativa común construida desde las expectativas reales y miedos históricos de la organización.</div>
+      </div>
+    </div>
+    <div class="deliv-card fu">
+      <div class="deliv-icon" style="background:#FFF3E0"><svg viewBox="0 0 24 24" fill="none" stroke="#E65100" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div>
+        <div class="deliv-title">Mapa de impactos</div>
+        <div class="deliv-desc">Plan de mitigación realista y accionable construido sobre impactos As-Is / To-Be por proceso.</div>
+      </div>
+    </div>
+    <div class="deliv-card fu">
+      <div class="deliv-icon" style="background:#F3E5F5"><svg viewBox="0 0 24 24" fill="none" stroke="#7B1FA2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+      <div>
+        <div class="deliv-title">Plan de comunicaciones</div>
+        <div class="deliv-desc">Mensajes, canales y timing diferenciados por audiencia y momento del proyecto.</div>
+      </div>
+    </div>
+    <div class="deliv-card fu">
+      <div class="deliv-icon" style="background:#FCE4EC"><svg viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      <div>
+        <div class="deliv-title">Gestión de riesgos humanos</div>
+        <div class="deliv-desc">Identificación temprana de burnout, sobrecarga y quiebres potenciales post go-live.</div>
+      </div>
+    </div>
+  </div>
+</div></div>
+</section>
+
+<script>
+let cur = 0;
+const N = 6;
+const pct = [16.6,33.3,50,66.6,83.3,100];
+
+function go(i) {
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.bn-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('s'+i).classList.add('on');
+  document.querySelectorAll('.nav-btn')[i].classList.add('active');
+  document.querySelectorAll('.bn-btn')[i].classList.add('on');
+  document.getElementById('prog').style.width = pct[i]+'%';
+  cur = i;
+  window.scrollTo(0,0);
+  // retrigger animations
+  document.querySelectorAll('#s'+i+' .fu').forEach(el => {
+    el.style.animation='none'; el.offsetHeight; el.style.animation='';
+  });
+}
+
+function qtab(i) {
+  document.querySelectorAll('.q-tab').forEach((t,j) => t.classList.toggle('on', j===i));
+  document.querySelectorAll('.q-panel').forEach((p,j) => p.classList.toggle('on', j===i));
+  document.querySelectorAll('#s4 .fu').forEach(el => {
+    el.style.animation='none'; el.offsetHeight; el.style.animation='';
+  });
+}
+
+// swipe — ignores scrollable containers and requires clear horizontal intent
+let tx = 0, ty = 0, tTarget = null;
+document.addEventListener('touchstart', e => {
+  tx = e.touches[0].clientX;
+  ty = e.touches[0].clientY;
+  tTarget = e.target;
+}, {passive:true});
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  const dy = e.changedTouches[0].clientY - ty;
+  // Ignore if touch started inside a horizontally scrollable element (q-tabs, nav-items)
+  if (tTarget && tTarget.closest('.q-tabs, .nav-items, .aud-grid, table')) return;
+  // Require: horizontal distance > 110px AND horizontal > 2× vertical (clear directional intent)
+  if (Math.abs(dx) > 110 && Math.abs(dx) > Math.abs(dy) * 2) {
+    if (dx < 0 && cur < N-1) go(cur+1);
+    else if (dx > 0 && cur > 0) go(cur-1);
+  }
+}, {passive:true});
+</script>
+</body>
+</html>
